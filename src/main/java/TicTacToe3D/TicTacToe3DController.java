@@ -1,6 +1,7 @@
 package TicTacToe3D;
 
 import TicTacToe3D.game.entity.Game;
+import TicTacToe3D.game.entity.Piece;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,114 @@ public class TicTacToe3DController {
     @RequestMapping(value = "/rotate_down")
     public String rotateDown(Model model) {
         this.game.board.rotateDown();
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/top_left")
+    public String topLeft(Model model) {
+        try {
+            this.game.move(0,0, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/top_middle")
+    public String topMiddle(Model model) {
+        try {
+            this.game.move(1,0, Piece.RED);
+        }
+        catch (IllegalArgumentException e) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/top_right")
+    public String topRight(Model model) {
+        try {
+            this.game.move(2, 0, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/middle_left")
+    public String middleLeft(Model model) {
+        try {
+            this.game.move(0, 1, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/middle_middle")
+    public String middleMiddle(Model model) {
+        try {
+            this.game.move(1, 1, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/middle_right")
+    public String middleRight(Model model) {
+        try {
+            this.game.move(2, 1, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/bottom_left")
+    public String bottomLeft(Model model) {
+        try {
+            this.game.move(0, 2, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/bottom_middle")
+    public String bottomMiddle(Model model) {
+        try {
+            this.game.move(1, 2, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/bottom_right")
+    public String bottomRight(Model model) {
+        try {
+            this.game.move(2, 2, Piece.RED);
+        }
+        catch (IllegalArgumentException ex) {
+            ;
+        }
         setModelGameAttributes(model, this.game);
         return "game";
     }
