@@ -3,8 +3,68 @@
 <body>
     <h4 class="game-status">
         <div>
-            <span style="white-space: pre-line" th:text="${game.getBoard()[0][0][0]}"></span>
+            <pre>+----------------------</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'| ∖' + ${game.getBoard()[0][2][0]} + '  ' + ${game.getBoard()[1][2][0]} + '  ' + ${game.getBoard()[2][2][0]} + ' ∖'"></span></pre>
+        </div>
+        <div>
+            <pre>|   ∖                     ∖</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'|     ∖ ' + ${game.getBoard()[0][1][0]} + '  ' + ${game.getBoard()[1][1][0]} + '  ' + ${game.getBoard()[2][1][0]} + ' ∖'"></span></pre>
+        </div>
+        <div>
+            <pre>|       ∖                     ∖</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'|         ∖ ' + ${game.getBoard()[0][0][0]} + '  ' + ${game.getBoard()[1][0][0]} + '  ' + ${game.getBoard()[2][0][0]} + ' ∖'"></span></pre>
+        </div>
+        <div>
+            <pre>|          ---------------------|</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'|   ' + ${game.getBoard()[0][2][1]} + ' |' + ${game.getBoard()[1][2][1]} + '  ' + ${game.getBoard()[2][2][1]} + '         |'"></span></pre>
+        </div>
+        <div>
+            <pre>|         |                     |</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'|       ' + ${game.getBoard()[0][1][1]} + '  ' + ${game.getBoard()[1][1][1]} + '  ' + ${game.getBoard()[2][1][1]} + '     |'"></span></pre>
+        </div>
+        <div>
+            <pre>|         |                     |</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'|         | ' + ${game.getBoard()[0][0][1]} + '  ' + ${game.getBoard()[1][0][1]} + '  ' + ${game.getBoard()[2][0][1]} + ' |'"></span></pre>
+        </div>
+        <div>
+            <pre>|         |                     |</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="' ∖ ' + ${game.getBoard()[0][2][2]} + '  ' + ${game.getBoard()[1][2][2]} + '  ' + ${game.getBoard()[2][2][2]} + '          |'"></span></pre>
+        </div>
+        <div>
+            <pre>   ∖      |                     |</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'     ∖ ' + ${game.getBoard()[0][1][2]} + '  ' + ${game.getBoard[1][1][2]} + '  ' + ${game.getBoard[2][1][2]} + '      |'"></span></pre>
+        </div>
+        <div>
+            <pre>       ∖  |                     |</pre>
+        </div>
+        <div>
+            <pre><span style="white-space: pre" th:text="'         ∖| ' + ${game.getBoard()[0][0][2]} + '  ' + ${game.getBoard()[1][0][2]} + '  ' + ${game.getBoard()[2][0][2]} + ' |'"></span></pre>
+        </div>
+        <div>
+            <pre>           ---------------------+</pre>
         </div>
     </h4>
+    <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
+    <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
+    <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
+    <button type="button" th:onclick="|window.location.href='/rotate_down'|">DOWN</button>
 </body>
 </html>
+
+
