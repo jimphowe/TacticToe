@@ -1,5 +1,6 @@
 package TicTacToe3D.game.entity;
 
+import javax.xml.stream.FactoryConfigurationError;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -7,8 +8,8 @@ import java.util.Random;
 public class Game {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
-    public String displayMessage;
-    public String gameOverMessage;
+    public String displayMessage = "";
+    public String gameOverMessage = "";
     private static final Random random = new Random();
 
     // Fills the board with uniformly random LocationStates
@@ -45,11 +46,12 @@ public class Game {
 
         ArrayList<ArrayList<BoardLocation>> runs = new ArrayList<>(Arrays.asList(a1, a2, a3, a4, a5, a6, a7, a8,
                 a9, a10, a11));
+        boolean gameOver = false;
         for (int i = 0; i < 6; i++) {
             for(ArrayList<BoardLocation> run : runs) {
                 if (locationToState(run.get(0)).equals(player) && locationToState(run.get(1)).equals(player)
                         && locationToState(run.get(2)).equals(player)) {
-                    return true;
+                    gameOver = true;
                 }
             }
             if (i % 2 == 0) {
@@ -59,7 +61,7 @@ public class Game {
                 this.rotateUp();
             }
         }
-        return false;
+        return gameOver;
     }
 
     public boolean gameOver() {

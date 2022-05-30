@@ -49,128 +49,79 @@ public class TicTacToe3DController {
         return "game";
     }
 
-    @RequestMapping(value = "/top_left")
-    public String topLeft(Model model) {
+    public void makeMove(int x, int y, LocationState player) {
         try {
-            this.game.move(0,0, LocationState.RED);
+            this.game.move(x,y,player);
             this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
             this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
                     "balls forward without pushing one out";
         }
+        if (game.gameOver()) {
+            game.gameOverMessage = "GAME OVER";
+        }
+    }
+
+    @RequestMapping(value = "/top_left")
+    public String topLeft(Model model) {
+        this.makeMove(0,0,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/top_middle")
     public String topMiddle(Model model) {
-        try {
-            this.game.move(1,0, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(1,0,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/top_right")
     public String topRight(Model model) {
-        try {
-            this.game.move(2, 0, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(2,0,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/middle_left")
     public String middleLeft(Model model) {
-        try {
-            this.game.move(0, 1, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(0,1,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/middle_middle")
     public String middleMiddle(Model model) {
-        try {
-            this.game.move(1, 1, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(1,1,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/middle_right")
     public String middleRight(Model model) {
-        try {
-            this.game.move(2, 1, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(2,1,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/bottom_left")
     public String bottomLeft(Model model) {
-        try {
-            this.game.move(0, 2, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(0,2,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/bottom_middle")
     public String bottomMiddle(Model model) {
-        try {
-            this.game.move(1, 2, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(1,2,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
 
     @RequestMapping(value = "/bottom_right")
     public String bottomRight(Model model) {
-        try {
-            this.game.move(2, 2, LocationState.RED);
-            this.game.displayMessage = "";
-        }
-        catch (IllegalArgumentException ex) {
-            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out";
-        }
+        this.makeMove(2,2,LocationState.RED);
         setModelGameAttributes(model, this.game);
         return "game";
     }
