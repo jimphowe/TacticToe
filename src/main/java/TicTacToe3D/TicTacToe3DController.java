@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.concurrent.TimeUnit;
+
 @Controller
 public class TicTacToe3DController {
 
@@ -14,7 +16,7 @@ public class TicTacToe3DController {
 
     @RequestMapping(value = "/game")
     public String reset(Model model) {
-        this.game.setBoard();
+        this.game.setStartingBoard();
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -51,9 +53,11 @@ public class TicTacToe3DController {
     public String topLeft(Model model) {
         try {
             this.game.move(0,0, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -63,9 +67,11 @@ public class TicTacToe3DController {
     public String topMiddle(Model model) {
         try {
             this.game.move(1,0, LocationState.RED);
+            this.game.displayMessage = "";
         }
-        catch (IllegalArgumentException e) {
-            ;
+        catch (IllegalArgumentException ex) {
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -75,9 +81,11 @@ public class TicTacToe3DController {
     public String topRight(Model model) {
         try {
             this.game.move(2, 0, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -87,9 +95,11 @@ public class TicTacToe3DController {
     public String middleLeft(Model model) {
         try {
             this.game.move(0, 1, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -99,9 +109,11 @@ public class TicTacToe3DController {
     public String middleMiddle(Model model) {
         try {
             this.game.move(1, 1, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -111,9 +123,11 @@ public class TicTacToe3DController {
     public String middleRight(Model model) {
         try {
             this.game.move(2, 1, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -123,9 +137,11 @@ public class TicTacToe3DController {
     public String bottomLeft(Model model) {
         try {
             this.game.move(0, 2, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -135,9 +151,11 @@ public class TicTacToe3DController {
     public String bottomMiddle(Model model) {
         try {
             this.game.move(1, 2, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";
@@ -147,9 +165,11 @@ public class TicTacToe3DController {
     public String bottomRight(Model model) {
         try {
             this.game.move(2, 2, LocationState.RED);
+            this.game.displayMessage = "";
         }
         catch (IllegalArgumentException ex) {
-            ;
+            this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out";
         }
         setModelGameAttributes(model, this.game);
         return "game";

@@ -1,18 +1,92 @@
 package TicTacToe3D.game.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 public class Game {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
-    // Arranged like a die 1-front,2-right,3-top,4-bottom,5-left,6-back
-    Integer orientation = 1;
+    public String displayMessage;
+    public String gameOverMessage;
+    private static final Random random = new Random();
 
-    public void setBoard() {
+    // Fills the board with uniformly random LocationStates
+    public void setRandomBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 for (int k = 0; k < 3; k++) {
                     this.pieces[i][j][k] = LocationState.randomPiece();
                 }
             }
+        }
+    }
+
+    LocationState locationToState(BoardLocation location) {
+        return this.pieces[location.getX()][location.getY()][location.getZ()];
+    }
+
+    private boolean hasWon(LocationState player) {
+        // Horizontal
+        ArrayList<BoardLocation> a1 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 0), new BoardLocation(1, 0, 0), new BoardLocation(2, 0, 0)));
+        ArrayList<BoardLocation> a2 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 1), new BoardLocation(1, 0, 1), new BoardLocation(2, 0, 1)));
+        ArrayList<BoardLocation> a3 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 2), new BoardLocation(1, 0, 2), new BoardLocation(2, 0, 2)));
+        // Vertical
+        ArrayList<BoardLocation> a4 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 0), new BoardLocation(0, 0, 1), new BoardLocation(0, 0, 2)));
+        ArrayList<BoardLocation> a5 = new ArrayList<>(Arrays.asList(new BoardLocation(1, 0, 0), new BoardLocation(1, 0, 1), new BoardLocation(1, 0, 2)));
+        ArrayList<BoardLocation> a6 = new ArrayList<>(Arrays.asList(new BoardLocation(2, 0, 0), new BoardLocation(2, 0, 1), new BoardLocation(2, 0, 2)));
+        // Diagonal
+        ArrayList<BoardLocation> a7 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 0), new BoardLocation(1, 0, 1), new BoardLocation(2, 0, 2)));
+        ArrayList<BoardLocation> a8 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 2), new BoardLocation(1, 0, 1), new BoardLocation(2, 0, 0)));
+        // Center
+        ArrayList<BoardLocation> a9 = new ArrayList<>(Arrays.asList(new BoardLocation(1, 0, 1), new BoardLocation(1, 1, 1), new BoardLocation(1, 2, 1)));
+        ArrayList<BoardLocation> a10 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 0), new BoardLocation(1, 1, 1), new BoardLocation(2, 2, 2)));
+        ArrayList<BoardLocation> a11 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 1), new BoardLocation(1, 1, 1), new BoardLocation(2, 2, 1)));
+
+        ArrayList<ArrayList<BoardLocation>> runs = new ArrayList<>(Arrays.asList(a1, a2, a3, a4, a5, a6, a7, a8,
+                a9, a10, a11));
+        for (int i = 0; i < 6; i++) {
+            for(ArrayList<BoardLocation> run : runs) {
+                if (locationToState(run.get(0)).equals(player) && locationToState(run.get(1)).equals(player)
+                        && locationToState(run.get(2)).equals(player)) {
+                    return true;
+                }
+            }
+            if (i % 2 == 0) {
+                this.rotateLeft();
+            }
+            else {
+                this.rotateUp();
+            }
+        }
+        return false;
+    }
+
+    public boolean gameOver() {
+        return hasWon(LocationState.WHITE) || hasWon(LocationState.RED);
+    }
+
+    // Sets the board to start a game (9 Neutral Black pieces in random locations)
+    public void setStartingBoard() {
+        // Set everything to empty
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    this.pieces[i][j][k] = LocationState.EMPTY;
+                }
+            }
+        }
+        // Pick 9 to make Black
+        for (int i = 0; i < 9; i++) {
+            int x = random.nextInt(3);
+            int y = random.nextInt(3);
+            int z = random.nextInt(3);
+            while (this.pieces[x][y][z] == LocationState.BLACK) {
+                x = random.nextInt(3);
+                y = random.nextInt(3);
+                z = random.nextInt(3);
+            }
+            this.pieces[x][y][z] = LocationState.BLACK;
         }
     }
 
