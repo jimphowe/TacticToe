@@ -11,6 +11,7 @@ public class Game {
     public String displayMessage = "";
     public String gameOverMessage = "";
     private static final Random random = new Random();
+    private LocationState computerColor = LocationState.GREEN;
 
     // Fills the board with uniformly random LocationStates
     public void setRandomBoard() {
@@ -21,6 +22,53 @@ public class Game {
                 }
             }
         }
+    }
+
+    //TODO random move
+    // Idea: pick some # of random turns to do and write them down, pick a random move on front face, then
+    // undo the turns. Maybe an algo to tell how to get from where we are to the original instead of undoing
+    // them if we need a high number of turns to be random?... not sure
+
+    private void randomMoveOnFront() {
+        int x = random.nextInt(3);
+        int y = random.nextInt(3);
+        this.move(x,y,computerColor);
+    }
+
+    public void computerMove() {
+        int side = random.nextInt(6);
+        switch (side) {
+            case 0:
+                randomMoveOnFront();
+                break;
+            case 1:
+                this.rotateDown();
+                randomMoveOnFront();
+                this.rotateUp();
+                break;
+            case 2:
+                this.rotateUp();
+                randomMoveOnFront();
+                this.rotateDown();
+                break;
+            case 3:
+                this.rotateRight();
+                randomMoveOnFront();
+                this.rotateLeft();
+                break;
+            case 4:
+                this.rotateLeft();
+                randomMoveOnFront();
+                this.rotateRight();
+                break;
+            case 5:
+                this.rotateUp();
+                this.rotateUp();
+                randomMoveOnFront();
+                this.rotateDown();
+                this.rotateDown();
+                break;
+            }
     }
 
     LocationState locationToState(BoardLocation location) {
@@ -64,8 +112,21 @@ public class Game {
         return gameOver;
     }
 
+    private boolean boardFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (this.pieces[i][j][k] == LocationState.EMPTY) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean gameOver() {
-        return hasWon(LocationState.WHITE) || hasWon(LocationState.RED);
+        return hasWon(LocationState.GREEN) || hasWon(LocationState.RED) || boardFull();
     }
 
     // Sets the board to start a game (9 Neutral Black pieces in random locations)

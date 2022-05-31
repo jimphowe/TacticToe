@@ -6,7 +6,7 @@ import java.util.Random;
 public enum LocationState {
     RED,
     BLACK,
-    WHITE,
+    GREEN,
     EMPTY;
 
     private static final List<LocationState> values = List.of(values());

@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.concurrent.TimeUnit;
-
 @Controller
 public class TicTacToe3DController {
 
@@ -53,6 +51,7 @@ public class TicTacToe3DController {
         try {
             this.game.move(x,y,player);
             this.game.displayMessage = "";
+            this.game.computerMove();
         }
         catch (IllegalArgumentException ex) {
             this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
@@ -134,5 +133,4 @@ public class TicTacToe3DController {
     private void setModelGameAttributes(Model model, Game game) {
         model.addAttribute("game", game);
     }
-
 }
