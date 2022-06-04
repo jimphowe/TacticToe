@@ -20,6 +20,21 @@ public class TicTacToe3DController {
         return "game";
     }
 
+    @RequestMapping(value = "/difficulty_selection")
+    public String difficultySelection(Model model) {
+        setModelGameAttributes(model, this.game);
+        return "difficulty_selection";
+    }
+
+    @RequestMapping(value = "/level1")
+    public String level1(Model model) {
+        game = new Game();
+        this.game.setStartingBoard();
+        this.game.difficulty = 1;
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
     @RequestMapping(value = "/rotate_left")
     public String rotateLeft(Model model) {
         this.game.rotateLeft();

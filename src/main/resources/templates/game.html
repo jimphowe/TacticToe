@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-    <h4 class="game-status">
+    <h4 class="game-board">
         <div>
             <pre>+----------------------</pre>
         </div>
@@ -60,7 +60,7 @@
             <pre>           ---------------------+</pre>
         </div>
     </h4>
-    <span th:if="${game.winner} == ''">
+    <span class="game-buttons" th:if="${game.winner} == ''">
         <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
         <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
         <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
@@ -82,6 +82,7 @@
         <span style="white-space: pre" th:text="${game.winner} + ' WINS!'"></span>
         <button type="button" th:onclick="|window.location.href='/game'|">PLAY AGAIN</button>
     </div>
+    <button type="button" th:onclick="|window.location.href='/'|">HOME</button>
 </body>
 </html>
 

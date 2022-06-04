@@ -1,6 +1,5 @@
 package TicTacToe3D.game.entity;
 
-import javax.xml.stream.FactoryConfigurationError;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -10,24 +9,9 @@ public class Game {
     public LocationState[][][] pieces = new LocationState[3][3][3];
     public String displayMessage = "";
     public String winner = "";
+    public Integer difficulty = null;
     private static final Random random = new Random();
     private final LocationState computerColor = LocationState.GREEN;
-
-    // Fills the board with uniformly random LocationStates
-    public void setRandomBoard() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    this.pieces[i][j][k] = LocationState.randomPiece();
-                }
-            }
-        }
-    }
-
-    //TODO random move
-    // Idea: pick some # of random turns to do and write them down, pick a random move on front face, then
-    // undo the turns. Maybe an algo to tell how to get from where we are to the original instead of undoing
-    // them if we need a high number of turns to be random?... not sure
 
     private void randomMoveOnFront() {
         int x = random.nextInt(3);
@@ -35,7 +19,7 @@ public class Game {
         this.move(x,y,computerColor);
     }
 
-    public void computerMove() {
+    public void randomComputerMove() {
         int side = random.nextInt(6);
         switch (side) {
             case 0:
@@ -69,6 +53,16 @@ public class Game {
                 this.rotateDown();
                 break;
             }
+    }
+
+    public void computerMove() {
+        switch (this.difficulty) {
+            case 1:
+                randomComputerMove();
+                break;
+            default:
+                randomComputerMove();
+        }
     }
 
     LocationState locationToState(BoardLocation location) {
