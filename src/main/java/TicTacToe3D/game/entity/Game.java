@@ -9,9 +9,9 @@ public class Game {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
     public String displayMessage = "";
-    public String gameOverMessage = "";
+    public String winner = "";
     private static final Random random = new Random();
-    private LocationState computerColor = LocationState.GREEN;
+    private final LocationState computerColor = LocationState.GREEN;
 
     // Fills the board with uniformly random LocationStates
     public void setRandomBoard() {

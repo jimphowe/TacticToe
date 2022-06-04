@@ -14,6 +14,7 @@ public class TicTacToe3DController {
 
     @RequestMapping(value = "/game")
     public String reset(Model model) {
+        game = new Game();
         this.game.setStartingBoard();
         setModelGameAttributes(model, this.game);
         return "game";
@@ -47,18 +48,26 @@ public class TicTacToe3DController {
         return "game";
     }
 
+    // TODO this seems messy with all the gameOver checks
     public void makeMove(int x, int y, LocationState player) {
         try {
+            if (game.gameOver()) {
+                return;
+            }
             this.game.move(x,y,player);
+            if (game.gameOver()) {
+                game.winner = "RED";
+                return;
+            }
             this.game.displayMessage = "";
             this.game.computerMove();
+            if (game.gameOver()) {
+                game.winner = "GREEN";
+            }
         }
         catch (IllegalArgumentException ex) {
             this.game.displayMessage = "The spot chosen must either be empty or be able to push other " +
                     "balls forward without pushing one out";
-        }
-        if (game.gameOver()) {
-            game.gameOverMessage = "GAME OVER";
         }
     }
 

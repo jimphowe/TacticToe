@@ -60,11 +60,11 @@
             <pre>           ---------------------+</pre>
         </div>
     </h4>
-    <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
-    <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
-    <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
-    <button type="button" th:onclick="|window.location.href='/rotate_down'|">DOWN</button>
-    <span>
+    <span th:if="${game.winner} == ''">
+        <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
+        <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
+        <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
+        <button type="button" th:onclick="|window.location.href='/rotate_down'|">DOWN</button>
         <button type="button" th:onclick="|window.location.href='/top_left'|">TOP LEFT</button>
         <button type="button" th:onclick="|window.location.href='/top_middle'|">TOP MIDDLE</button>
         <button type="button" th:onclick="|window.location.href='/top_right'|">TOP RIGHT</button>
@@ -78,8 +78,9 @@
     <div>
         <span style="white-space: pre" th:text="${game.displayMessage}"></span>
     </div>
-    <div>
-        <span style="white-space: pre" th:text="${game.gameOverMessage}"></span>
+    <div th:if="${game.winner} != ''">
+        <span style="white-space: pre" th:text="${game.winner} + ' WINS!'"></span>
+        <button type="button" th:onclick="|window.location.href='/game'|">PLAY AGAIN</button>
     </div>
 </body>
 </html>
