@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class TicTacToe3DController {
+public class TacticToeController {
 
     OnePlayerImpl game = new OnePlayerImpl();
 
-    @RequestMapping(value = "/game")
+    @RequestMapping(value = "/restart")
     public String reset(Model model) {
-        game = new OnePlayerImpl();
-        this.game.setStartingBoard();
+        this.game.restart();
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -31,6 +30,24 @@ public class TicTacToe3DController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 1;
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/level2")
+    public String level2(Model model) {
+        game = new OnePlayerImpl();
+        this.game.setStartingBoard();
+        this.game.difficulty = 2;
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
+    @RequestMapping(value = "/level3")
+    public String level3(Model model) {
+        game = new OnePlayerImpl();
+        this.game.setStartingBoard();
+        this.game.difficulty = 3;
         setModelGameAttributes(model, this.game);
         return "game";
     }

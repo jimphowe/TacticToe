@@ -15,4 +15,8 @@ public interface TacticToeModel {
     void rotateUp();
 
     void rotateDown();
+
+    void restart();
+
+    void undo();
 }

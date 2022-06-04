@@ -2,9 +2,8 @@ package TicTacToe3D.game.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
-public class TacticToeModelImpl implements TacticToeModel {
+public abstract class TacticToeModelImpl implements TacticToeModel {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
     public String displayMessage = "";
@@ -157,4 +156,10 @@ public class TacticToeModelImpl implements TacticToeModel {
         }
         this.pieces = rotated;
     }
+
+    @Override
+    public abstract void restart();
+
+    @Override
+    public abstract void undo();
 }

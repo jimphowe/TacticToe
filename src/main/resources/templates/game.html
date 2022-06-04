@@ -80,7 +80,7 @@
     </div>
     <div th:if="${game.winner} != ''">
         <span style="white-space: pre" th:text="${game.winner} + ' WINS!'"></span>
-        <button type="button" th:onclick="|window.location.href='/game'|">PLAY AGAIN</button>
+        <button type="button" th:onclick="|window.location.href='/restart'|">PLAY AGAIN</button>
     </div>
     <button type="button" th:onclick="|window.location.href='/'|">HOME</button>
 </body>

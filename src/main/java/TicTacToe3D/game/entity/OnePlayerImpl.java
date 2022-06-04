@@ -82,4 +82,14 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             this.pieces[x][y][z] = LocationState.BLACK;
         }
     }
+
+    @Override
+    public void restart() {
+        this.setStartingBoard();
+    }
+
+    // TODO
+    @Override
+    public void undo() {
+    }
 }
