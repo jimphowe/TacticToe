@@ -1,6 +1,6 @@
 package TicTacToe3D;
 
-import TicTacToe3D.game.entity.Game;
+import TicTacToe3D.game.entity.OnePlayerImpl;
 import TicTacToe3D.game.entity.LocationState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class TicTacToe3DController {
 
-    Game game = new Game();
+    OnePlayerImpl game = new OnePlayerImpl();
 
     @RequestMapping(value = "/game")
     public String reset(Model model) {
-        game = new Game();
+        game = new OnePlayerImpl();
         this.game.setStartingBoard();
         setModelGameAttributes(model, this.game);
         return "game";
@@ -28,7 +28,7 @@ public class TicTacToe3DController {
 
     @RequestMapping(value = "/level1")
     public String level1(Model model) {
-        game = new Game();
+        game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 1;
         setModelGameAttributes(model, this.game);
@@ -66,17 +66,17 @@ public class TicTacToe3DController {
     // TODO this seems messy with all the gameOver checks
     public void makeMove(int x, int y, LocationState player) {
         try {
-            if (game.gameOver()) {
+            if (game.isGameOver()) {
                 return;
             }
             this.game.move(x,y,player);
-            if (game.gameOver()) {
+            if (game.isGameOver()) {
                 game.winner = "RED";
                 return;
             }
             this.game.displayMessage = "";
             this.game.computerMove();
-            if (game.gameOver()) {
+            if (game.isGameOver()) {
                 game.winner = "GREEN";
             }
         }
@@ -154,7 +154,7 @@ public class TicTacToe3DController {
         return "index";
     }
 
-    private void setModelGameAttributes(Model model, Game game) {
+    private void setModelGameAttributes(Model model, OnePlayerImpl game) {
         model.addAttribute("game", game);
     }
 }

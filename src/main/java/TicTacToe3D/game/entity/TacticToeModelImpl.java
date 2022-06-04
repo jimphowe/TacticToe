@@ -4,65 +4,64 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Game {
+public class TacticToeModelImpl implements TacticToeModel {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
     public String displayMessage = "";
     public String winner = "";
-    public Integer difficulty = null;
-    private static final Random random = new Random();
-    private final LocationState computerColor = LocationState.GREEN;
 
-    private void randomMoveOnFront() {
-        int x = random.nextInt(3);
-        int y = random.nextInt(3);
-        this.move(x,y,computerColor);
+    private boolean isValidMove(int x, int y) {
+        return this.pieces[x][0][y] == LocationState.EMPTY ||
+                this.pieces[x][1][y] == LocationState.EMPTY ||
+                this.pieces[x][2][y] == LocationState.EMPTY;
     }
 
-    public void randomComputerMove() {
-        int side = random.nextInt(6);
-        switch (side) {
-            case 0:
-                randomMoveOnFront();
-                break;
-            case 1:
-                this.rotateDown();
-                randomMoveOnFront();
-                this.rotateUp();
-                break;
-            case 2:
-                this.rotateUp();
-                randomMoveOnFront();
-                this.rotateDown();
-                break;
-            case 3:
-                this.rotateRight();
-                randomMoveOnFront();
-                this.rotateLeft();
-                break;
-            case 4:
-                this.rotateLeft();
-                randomMoveOnFront();
-                this.rotateRight();
-                break;
-            case 5:
-                this.rotateUp();
-                this.rotateUp();
-                randomMoveOnFront();
-                this.rotateDown();
-                this.rotateDown();
-                break;
-            }
-    }
-
-    public void computerMove() {
-        switch (this.difficulty) {
-            case 1:
-                randomComputerMove();
-                break;
-            default:
-                randomComputerMove();
+    @Override
+    public void move(int x, int y, LocationState player) {
+        if (!isValidMove(x,y)) {
+            throw new IllegalArgumentException("The spot chosen must either be empty or be able to push other " +
+                    "balls forward without pushing one out");
         }
+        else {
+            if (this.pieces[x][0][y] == LocationState.EMPTY) {
+                this.pieces[x][0][y] = player;
+            }
+            else if (this.pieces[x][1][y] == LocationState.EMPTY) {
+                this.pieces[x][1][y] = this.pieces[x][0][y];
+                this.pieces[x][0][y] = player;
+            }
+            else {
+                this.pieces[x][2][y] = this.pieces[x][1][y];
+                this.pieces[x][1][y] = this.pieces[x][0][y];
+                this.pieces[x][0][y] = player;
+            }
+        }
+    }
+
+    // Used in game view template
+    public String[][][] getBoard() {
+        String[][][] out = new String[3][3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    out[i][j][k] = this.pieces[i][j][k].toString();
+                }
+            }
+        }
+        return out;
+    }
+
+    private boolean boardFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (this.pieces[i][j][k] == LocationState.EMPTY) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     LocationState locationToState(BoardLocation location) {
@@ -106,58 +105,9 @@ public class Game {
         return gameOver;
     }
 
-    private boolean boardFull() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    if (this.pieces[i][j][k] == LocationState.EMPTY) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean gameOver() {
+    @Override
+    public boolean isGameOver() {
         return hasWon(LocationState.GREEN) || hasWon(LocationState.RED) || boardFull();
-    }
-
-    // Sets the board to start a game (9 Neutral Black pieces in random locations)
-    public void setStartingBoard() {
-        // Set everything to empty
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    this.pieces[i][j][k] = LocationState.EMPTY;
-                }
-            }
-        }
-        // Pick 9 to make Black
-        for (int i = 0; i < 9; i++) {
-            int x = random.nextInt(3);
-            int y = random.nextInt(3);
-            int z = random.nextInt(3);
-            while (this.pieces[x][y][z] == LocationState.BLACK) {
-                x = random.nextInt(3);
-                y = random.nextInt(3);
-                z = random.nextInt(3);
-            }
-            this.pieces[x][y][z] = LocationState.BLACK;
-        }
-    }
-
-    // Used in game view template
-    public String[][][] getBoard() {
-        String[][][] out = new String[3][3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    out[i][j][k] = this.pieces[i][j][k].toString();
-                }
-            }
-        }
-        return out;
     }
 
     public void rotateLeft() {
@@ -206,32 +156,5 @@ public class Game {
             }
         }
         this.pieces = rotated;
-    }
-
-    private boolean isValidMove(int x, int y) {
-        return this.pieces[x][0][y] == LocationState.EMPTY ||
-                this.pieces[x][1][y] == LocationState.EMPTY ||
-                this.pieces[x][2][y] == LocationState.EMPTY;
-    }
-
-    public void move(int x, int y, LocationState player) {
-        if (!isValidMove(x,y)) {
-            throw new IllegalArgumentException("The spot chosen must either be empty or be able to push other " +
-                    "balls forward without pushing one out");
-        }
-        else {
-            if (this.pieces[x][0][y] == LocationState.EMPTY) {
-                this.pieces[x][0][y] = player;
-            }
-            else if (this.pieces[x][1][y] == LocationState.EMPTY) {
-                this.pieces[x][1][y] = this.pieces[x][0][y];
-                this.pieces[x][0][y] = player;
-            }
-            else {
-                this.pieces[x][2][y] = this.pieces[x][1][y];
-                this.pieces[x][1][y] = this.pieces[x][0][y];
-                this.pieces[x][0][y] = player;
-            }
-        }
     }
 }
