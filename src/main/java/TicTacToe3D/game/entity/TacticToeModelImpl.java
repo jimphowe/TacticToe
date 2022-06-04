@@ -6,6 +6,7 @@ import java.util.Arrays;
 public abstract class TacticToeModelImpl implements TacticToeModel {
     // [left-right][front-back][top-bottom]
     public LocationState[][][] pieces = new LocationState[3][3][3];
+    ArrayList<LocationState[][][]> previousBoards;
     public String displayMessage = "";
     public String winner = "";
 
@@ -15,6 +16,16 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
                 this.pieces[x][2][y] == LocationState.EMPTY;
     }
 
+    LocationState[][][] copyBoard(LocationState[][][] board) {
+        LocationState[][][] copy = new LocationState[3][3][3];
+        for (int i = 0; i <= 2; i++) {
+            for(int j = 0; j <= 2; j++) {
+                System.arraycopy(board[i][j], 0, copy[i][j], 0, 3);
+            }
+        }
+        return copy;
+    }
+
     @Override
     public void move(int x, int y, LocationState player) {
         if (!isValidMove(x,y)) {
@@ -22,6 +33,7 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
                     "balls forward without pushing one out");
         }
         else {
+            previousBoards.add(copyBoard(this.pieces));
             if (this.pieces[x][0][y] == LocationState.EMPTY) {
                 this.pieces[x][0][y] = player;
             }

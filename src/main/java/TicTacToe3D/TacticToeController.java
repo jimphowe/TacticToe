@@ -19,6 +19,13 @@ public class TacticToeController {
         return "game";
     }
 
+    @RequestMapping(value = "/undo")
+    public String undo(Model model) {
+        this.game.undo();
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
     @RequestMapping(value = "/difficulty_selection")
     public String difficultySelection(Model model) {
         setModelGameAttributes(model, this.game);

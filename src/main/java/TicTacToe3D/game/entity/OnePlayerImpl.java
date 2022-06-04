@@ -1,5 +1,6 @@
 package TicTacToe3D.game.entity;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class OnePlayerImpl extends TacticToeModelImpl {
@@ -54,6 +55,10 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             case 1:
                 randomComputerMove();
                 break;
+            case 2:
+                break;
+            case 3:
+                break;
             default:
                 randomComputerMove();
         }
@@ -81,6 +86,9 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             }
             this.pieces[x][y][z] = LocationState.BLACK;
         }
+        // Set previous boards
+        this.previousBoards = new ArrayList<>();
+        this.previousBoards.add(copyBoard(this.pieces));
     }
 
     @Override
@@ -88,8 +96,12 @@ public class OnePlayerImpl extends TacticToeModelImpl {
         this.setStartingBoard();
     }
 
-    // TODO
     @Override
     public void undo() {
+        if(previousBoards.size() > 1) {
+            this.pieces = previousBoards.get(previousBoards.size()-2);
+            previousBoards.remove(previousBoards.size()-1);
+            previousBoards.remove(previousBoards.size()-1);
+        }
     }
 }
