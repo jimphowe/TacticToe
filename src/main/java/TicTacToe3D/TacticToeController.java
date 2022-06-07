@@ -15,6 +15,7 @@ public class TacticToeController {
     @RequestMapping(value = "/restart")
     public String reset(Model model) {
         this.game.restart();
+        game.computerMove();
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -37,6 +38,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 1;
+        game.computerMove();
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -46,6 +48,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 2;
+        game.computerMove();
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -55,6 +58,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 3;
+        game.computerMove();
         setModelGameAttributes(model, this.game);
         return "game";
     }

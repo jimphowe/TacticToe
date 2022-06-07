@@ -6,62 +6,52 @@ import java.util.Random;
 public class OnePlayerImpl extends TacticToeModelImpl {
     public Integer difficulty = null;
     private final LocationState computerColor = LocationState.GREEN;
+    private final LocationState playerColor = LocationState.RED;
     private static final Random random = new Random();
 
-    private void randomMoveOnFront() {
-        int x = random.nextInt(3);
-        int y = random.nextInt(3);
-        this.move(x,y,computerColor);
+    private Move lvl1Move() {
+        TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        Move move = tester.getWinningMove(computerColor);
+        if (move == null) {
+            move = tester.getRandomMove(computerColor);
+        }
+        return move;
     }
 
-    public void randomComputerMove() {
-        int side = random.nextInt(6);
-        switch (side) {
-            case 0:
-                randomMoveOnFront();
-                break;
-            case 1:
-                this.rotateDown();
-                randomMoveOnFront();
-                this.rotateUp();
-                break;
-            case 2:
-                this.rotateUp();
-                randomMoveOnFront();
-                this.rotateDown();
-                break;
-            case 3:
-                this.rotateRight();
-                randomMoveOnFront();
-                this.rotateLeft();
-                break;
-            case 4:
-                this.rotateLeft();
-                randomMoveOnFront();
-                this.rotateRight();
-                break;
-            case 5:
-                this.rotateUp();
-                this.rotateUp();
-                randomMoveOnFront();
-                this.rotateDown();
-                this.rotateDown();
-                break;
-            }
+    private Move lvl2Move() {
+        TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        Move move = tester.getWinningMove(computerColor);
+        if (move == null) {
+            move = tester.getRandomMove(computerColor);
+        }
+        return move;
+    }
+
+    private Move lvl3Move() {
+        TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        Move move = tester.getWinningMove(computerColor);
+        if (move == null) {
+            move = tester.getRandomMove(computerColor);
+        }
+        return move;
     }
 
     public void computerMove() {
+        Move move = null;
         switch (this.difficulty) {
             case 1:
-                randomComputerMove();
+                move = lvl1Move();
                 break;
             case 2:
+                move = lvl2Move();
                 break;
             case 3:
+                move = lvl3Move();
                 break;
             default:
-                randomComputerMove();
         }
+        assert move != null;
+        move(move.x,move.y,move.face,move.player);
     }
 
     // Sets the board to start a game (9 Neutral Black pieces in random locations)
@@ -94,6 +84,7 @@ public class OnePlayerImpl extends TacticToeModelImpl {
     @Override
     public void restart() {
         this.setStartingBoard();
+        this.winner = "";
     }
 
     @Override

@@ -10,10 +10,71 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
     public String displayMessage = "";
     public String winner = "";
 
-    private boolean isValidMove(int x, int y) {
+    // For Debugging
+    public String getBoardString() {
+        String gameState = "+----------------------\n";
+        gameState += "| ∖ " + pieces[0][2][0].toString() + "  " + pieces[1][2][0].toString() + "  " + pieces[2][2][0].toString() + " ∖\n";
+        gameState += "|   ∖                     ∖\n";
+        gameState += "|     ∖ " + pieces[0][1][0].toString() + "  " + pieces[1][1][0].toString() + "  " + pieces[2][1][0].toString() + " ∖\n";
+        gameState += "|       ∖                     ∖\n";
+        gameState += "|         ∖ " + pieces[0][0][0].toString() + "  " + pieces[1][0][0].toString() + "  " + pieces[2][0][0].toString() + " ∖\n";
+        gameState += "|          ---------------------|\n";
+        gameState += "|   " + pieces[0][2][1].toString() + " |" + pieces[1][2][1].toString() + "  " + pieces[2][2][1].toString() + "         |\n";
+        gameState += "|         |                     |\n";
+        gameState += "|       " + pieces[0][1][1].toString() + "  " + pieces[1][1][1].toString() + "  " + pieces[2][1][1].toString() + "     |\n";
+        gameState += "|         |                     |\n";
+        gameState += "|         | " + pieces[0][0][1].toString() + "  " + pieces[1][0][1].toString() + "  " + pieces[2][0][1].toString() + " |\n";
+        gameState += "|         |                     |\n";
+        gameState += " ∖ " + pieces[0][2][2].toString() + "  " + pieces[1][2][2].toString() + "  " + pieces[2][2][2].toString() + "          |\n";
+        gameState += "   ∖      |                     |\n";
+        gameState += "     ∖ " + pieces[0][1][2].toString() + "  " + pieces[1][1][2].toString() + "  " + pieces[2][1][2].toString() + "      |\n";
+        gameState += "       ∖  |                     |\n";
+        gameState += "         ∖| " + pieces[0][0][2].toString() + "  " + pieces[1][0][2].toString() + "  " + pieces[2][0][2].toString() + " |\n";
+        gameState += "           ---------------------+\n\n";
+        return gameState;
+    }
+
+    boolean isValidMove(int x,int y) {
         return this.pieces[x][0][y] == LocationState.EMPTY ||
                 this.pieces[x][1][y] == LocationState.EMPTY ||
                 this.pieces[x][2][y] == LocationState.EMPTY;
+    }
+
+    boolean isValidMove(int x,int y,int face) {
+        boolean result = false;
+        switch (face) {
+            case 1:
+                result = isValidMove(x,y);
+                break;
+            case 2:
+                this.rotateDown();
+                result = isValidMove(x,y);
+                this.rotateUp();
+                break;
+            case 3:
+                this.rotateUp();
+                result = isValidMove(x,y);
+                this.rotateDown();
+                break;
+            case 4:
+                this.rotateRight();
+                result = isValidMove(x,y);
+                this.rotateLeft();
+                break;
+            case 5:
+                this.rotateLeft();
+                result = isValidMove(x,y);
+                this.rotateRight();
+                break;
+            case 6:
+                this.rotateUp();
+                this.rotateUp();
+                result = isValidMove(x,y);
+                this.rotateDown();
+                this.rotateDown();
+                break;
+        }
+        return result;
     }
 
     LocationState[][][] copyBoard(LocationState[][][] board) {
@@ -26,14 +87,12 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
         return copy;
     }
 
-    @Override
     public void move(int x, int y, LocationState player) {
         if (!isValidMove(x,y)) {
             throw new IllegalArgumentException("The spot chosen must either be empty or be able to push other " +
                     "balls forward without pushing one out");
         }
         else {
-            previousBoards.add(copyBoard(this.pieces));
             if (this.pieces[x][0][y] == LocationState.EMPTY) {
                 this.pieces[x][0][y] = player;
             }
@@ -46,6 +105,48 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
                 this.pieces[x][1][y] = this.pieces[x][0][y];
                 this.pieces[x][0][y] = player;
             }
+        }
+    }
+
+    @Override
+    public void move(int x, int y, int face, LocationState player) {
+        switch (face) {
+            case 1:
+                previousBoards.add(copyBoard(this.pieces));
+                move(x,y,player);
+                break;
+            case 2:
+                previousBoards.add(copyBoard(this.pieces));
+                this.rotateDown();
+                move(x,y,player);
+                this.rotateUp();
+                break;
+            case 3:
+                previousBoards.add(copyBoard(this.pieces));
+                this.rotateUp();
+                move(x,y,player);
+                this.rotateDown();
+                break;
+            case 4:
+                previousBoards.add(copyBoard(this.pieces));
+                this.rotateRight();
+                move(x,y,player);
+                this.rotateLeft();
+                break;
+            case 5:
+                previousBoards.add(copyBoard(this.pieces));
+                this.rotateLeft();
+                move(x,y,player);
+                this.rotateRight();
+                break;
+            case 6:
+                previousBoards.add(copyBoard(this.pieces));
+                this.rotateUp();
+                this.rotateUp();
+                move(x,y,player);
+                this.rotateDown();
+                this.rotateDown();
+                break;
         }
     }
 
@@ -79,7 +180,7 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
         return this.pieces[location.getX()][location.getY()][location.getZ()];
     }
 
-    private boolean hasWon(LocationState player) {
+    boolean hasWon(LocationState player) {
         // Horizontal
         ArrayList<BoardLocation> a1 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 0), new BoardLocation(1, 0, 0), new BoardLocation(2, 0, 0)));
         ArrayList<BoardLocation> a2 = new ArrayList<>(Arrays.asList(new BoardLocation(0, 0, 1), new BoardLocation(1, 0, 1), new BoardLocation(2, 0, 1)));

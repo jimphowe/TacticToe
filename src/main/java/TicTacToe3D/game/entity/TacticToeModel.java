@@ -1,7 +1,7 @@
 package TicTacToe3D.game.entity;
 
 public interface TacticToeModel {
-    void move(int x, int y, LocationState player) throws
+    void move(int x, int y, int face, LocationState player) throws
             IllegalArgumentException;
 
     boolean isGameOver();
