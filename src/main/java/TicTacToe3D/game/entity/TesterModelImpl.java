@@ -14,13 +14,13 @@ public class TesterModelImpl extends TacticToeModelImpl {
         this.previousBoards = new ArrayList<>();
     }
 
-    private ArrayList<Move> getPossibleMoves(LocationState player) {
+    private ArrayList<Move> getPossibleMoves() {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
                 for(Integer face : IntStream.range(1, 7).toArray()) {
                     if(this.isValidMove(i,j,face)) {
-                        Move toAdd = new Move(i,j,face,player);
+                        Move toAdd = new Move(i,j,face);
                         possibleMoves.add(toAdd);
                     }
                 }
@@ -29,18 +29,16 @@ public class TesterModelImpl extends TacticToeModelImpl {
         return possibleMoves;
     }
 
-    public Move getRandomMove(LocationState player) {
-        ArrayList<Move> possibleMoves = getPossibleMoves(computerColor);
+    public Move getRandomMove() {
+        ArrayList<Move> possibleMoves = getPossibleMoves();
         return possibleMoves.get(random.nextInt(possibleMoves.size()));
     }
 
-    public Move getWinningMove(LocationState player) {
-        for(Move move : getPossibleMoves(player)) {
-            move(move.x,move.y,move.face,move.player);
-            if (hasWon(player)) {
+    public Move getWinningMove() {
+        for(Move move : getPossibleMoves()) {
+            move(move.x,move.y,move.face,this.computerColor);
+            if (hasWon(this.computerColor)) {
                 this.undo();
-                //System.out.println(getBoardString());
-                //System.out.println(move.x + "," + move.y + "," + move.face);
                 return move;
             } else {
                 System.out.println("Before undo " + move.x + "," + move.y + "," + move.face);

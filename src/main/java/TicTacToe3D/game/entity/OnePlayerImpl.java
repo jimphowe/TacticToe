@@ -11,27 +11,27 @@ public class OnePlayerImpl extends TacticToeModelImpl {
 
     private Move lvl1Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove(computerColor);
+        Move move = tester.getWinningMove();
         if (move == null) {
-            move = tester.getRandomMove(computerColor);
+            move = tester.getRandomMove();
         }
         return move;
     }
 
     private Move lvl2Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove(computerColor);
+        Move move = tester.getWinningMove();
         if (move == null) {
-            move = tester.getRandomMove(computerColor);
+            move = tester.getRandomMove();
         }
         return move;
     }
 
     private Move lvl3Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove(computerColor);
+        Move move = tester.getWinningMove();
         if (move == null) {
-            move = tester.getRandomMove(computerColor);
+            move = tester.getRandomMove();
         }
         return move;
     }
@@ -51,7 +51,7 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             default:
         }
         assert move != null;
-        move(move.x,move.y,move.face,move.player);
+        move(move.x,move.y,move.face,this.computerColor);
     }
 
     // Sets the board to start a game (9 Neutral Black pieces in random locations)
