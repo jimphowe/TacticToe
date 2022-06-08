@@ -52,6 +52,7 @@ public class OnePlayerImpl extends TacticToeModelImpl {
         }
         assert move != null;
         move(move.x,move.y,move.face,this.computerColor);
+        this.previousBoards.add(copyBoard(this.pieces));
     }
 
     // Sets the board to start a game (9 Neutral Black pieces in random locations)
@@ -78,7 +79,6 @@ public class OnePlayerImpl extends TacticToeModelImpl {
         }
         // Set previous boards
         this.previousBoards = new ArrayList<>();
-        this.previousBoards.add(copyBoard(this.pieces));
     }
 
     @Override
@@ -89,8 +89,8 @@ public class OnePlayerImpl extends TacticToeModelImpl {
 
     @Override
     public void undo() {
-        if(previousBoards.size() > 1) {
-            this.pieces = previousBoards.get(previousBoards.size()-2);
+        if(previousBoards.size() > 2) {
+            this.pieces = previousBoards.get(previousBoards.size()-3);
             previousBoards.remove(previousBoards.size()-1);
             previousBoards.remove(previousBoards.size()-1);
         }

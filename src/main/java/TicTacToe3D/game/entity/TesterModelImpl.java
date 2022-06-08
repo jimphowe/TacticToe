@@ -40,17 +40,11 @@ public class TesterModelImpl extends TacticToeModelImpl {
             if (hasWon(this.computerColor)) {
                 this.undo();
                 return move;
-            } else {
-                System.out.println("Before undo " + move.x + "," + move.y + "," + move.face);
-                System.out.println(getBoardString());
-                System.out.println(this.previousBoards.size());
+            }
+            else {
                 this.undo();
-                System.out.println("After undo ");
-                System.out.println(getBoardString());
-                System.out.println(this.previousBoards.size());
             }
         }
-        undo();
         return null;
     }
 

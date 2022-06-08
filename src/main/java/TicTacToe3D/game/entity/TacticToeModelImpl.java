@@ -34,6 +34,29 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
         return gameState;
     }
 
+    public String getBoardString(LocationState[][][] board) {
+        String gameState = "+----------------------\n";
+        gameState += "| ∖ " + board[0][2][0].toString() + "  " + board[1][2][0].toString() + "  " + board[2][2][0].toString() + " ∖\n";
+        gameState += "|   ∖                     ∖\n";
+        gameState += "|     ∖ " + board[0][1][0].toString() + "  " + board[1][1][0].toString() + "  " + board[2][1][0].toString() + " ∖\n";
+        gameState += "|       ∖                     ∖\n";
+        gameState += "|         ∖ " + board[0][0][0].toString() + "  " + board[1][0][0].toString() + "  " + board[2][0][0].toString() + " ∖\n";
+        gameState += "|          ---------------------|\n";
+        gameState += "|   " + board[0][2][1].toString() + " |" + board[1][2][1].toString() + "  " + board[2][2][1].toString() + "         |\n";
+        gameState += "|         |                     |\n";
+        gameState += "|       " + board[0][1][1].toString() + "  " + board[1][1][1].toString() + "  " + board[2][1][1].toString() + "     |\n";
+        gameState += "|         |                     |\n";
+        gameState += "|         | " + board[0][0][1].toString() + "  " + board[1][0][1].toString() + "  " + board[2][0][1].toString() + " |\n";
+        gameState += "|         |                     |\n";
+        gameState += " ∖ " + board[0][2][2].toString() + "  " + board[1][2][2].toString() + "  " + board[2][2][2].toString() + "          |\n";
+        gameState += "   ∖      |                     |\n";
+        gameState += "     ∖ " + board[0][1][2].toString() + "  " + board[1][1][2].toString() + "  " + board[2][1][2].toString() + "      |\n";
+        gameState += "       ∖  |                     |\n";
+        gameState += "         ∖| " + board[0][0][2].toString() + "  " + board[1][0][2].toString() + "  " + board[2][0][2].toString() + " |\n";
+        gameState += "           ---------------------+\n\n";
+        return gameState;
+    }
+
     boolean isValidMove(int x,int y) {
         return this.pieces[x][0][y] == LocationState.EMPTY ||
                 this.pieces[x][1][y] == LocationState.EMPTY ||
