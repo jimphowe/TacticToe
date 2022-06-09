@@ -1,0 +1,79 @@
+.game-buttons {
+    width: 390px;
+    height: 390px;
+    display: block;
+    background: blue;
+    overflow-y: auto;
+    float: left;
+    margin: 15px;
+}
+
+.game-buttons > button {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: gray;
+    margin: 15px;
+}
+
+.game-board {
+    width: 270px;
+    height: 560px;
+    float: left;
+    margin: 70px;
+    background: lightgrey;
+}
+
+.rotate-buttons {
+    width: 265px;
+    height: 265px;
+    display: block;
+    background: blue;
+    overflow-y: auto;
+    float: left;
+    margin: 15px;
+}
+
+.rotate-buttons > button {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: gray;
+    margin: 15px;
+}
+
+.home-button {
+    width: 130px;
+    height: 130px;
+    display: block;
+    background: blue;
+    overflow-y: auto;
+    float: left;
+    margin: 15px;
+}
+
+.home-button > button {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: green;
+    margin: 15px;
+}
+
+.undo-button {
+    width: 130px;
+    height: 130px;
+    display: block;
+    background: blue;
+    overflow-y: auto;
+    float: left;
+    margin: 15px;
+}
+
+.undo-button > button {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: red;
+    margin: 15px;
+}

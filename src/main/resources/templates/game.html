@@ -1,89 +1,102 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" href="css/main.css"/>
+</head>
 <body>
-    <h4 class="game-board">
+    <div class="game-view">
+        <span class="game-buttons" th:if="${game.winner} == ''">
+            <button type="button" th:onclick="|window.location.href='/top_left'|">TOP LEFT</button>
+            <button type="button" th:onclick="|window.location.href='/top_middle'|">TOP MIDDLE</button>
+            <button type="button" th:onclick="|window.location.href='/top_right'|">TOP RIGHT</button>
+            <button type="button" th:onclick="|window.location.href='/middle_left'|">MIDDLE LEFT</button>
+            <button type="button" th:onclick="|window.location.href='/middle_middle'|">MIDDLE MIDDLE</button>
+            <button type="button" th:onclick="|window.location.href='/middle_right'|">MIDDLE RIGHT</button>
+            <button type="button" th:onclick="|window.location.href='/bottom_left'|">BOTTOM LEFT</button>
+            <button type="button" th:onclick="|window.location.href='/bottom_middle'|">BOTTOM MIDDLE</button>
+            <button type="button" th:onclick="|window.location.href='/bottom_right'|">BOTTOM RIGHT</button>
+        </span>
+        <h4 class="game-board">
+            <div>
+                <pre>+----------------------</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'| ∖' + ${game.getBoard()[0][2][0]} + '  ' + ${game.getBoard()[1][2][0]} + '  ' + ${game.getBoard()[2][2][0]} + ' ∖'"></span></pre>
+            </div>
+            <div>
+                <pre>|   ∖                     ∖</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'|     ∖ ' + ${game.getBoard()[0][1][0]} + '  ' + ${game.getBoard()[1][1][0]} + '  ' + ${game.getBoard()[2][1][0]} + ' ∖'"></span></pre>
+            </div>
+            <div>
+                <pre>|       ∖                     ∖</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'|         ∖ ' + ${game.getBoard()[0][0][0]} + '  ' + ${game.getBoard()[1][0][0]} + '  ' + ${game.getBoard()[2][0][0]} + ' ∖'"></span></pre>
+            </div>
+            <div>
+                <pre>|          ---------------------|</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'|   ' + ${game.getBoard()[0][2][1]} + ' |' + ${game.getBoard()[1][2][1]} + '  ' + ${game.getBoard()[2][2][1]} + '         |'"></span></pre>
+            </div>
+            <div>
+                <pre>|         |                     |</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'|       ' + ${game.getBoard()[0][1][1]} + '  ' + ${game.getBoard()[1][1][1]} + '  ' + ${game.getBoard()[2][1][1]} + '     |'"></span></pre>
+            </div>
+            <div>
+                <pre>|         |                     |</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'|         | ' + ${game.getBoard()[0][0][1]} + '  ' + ${game.getBoard()[1][0][1]} + '  ' + ${game.getBoard()[2][0][1]} + ' |'"></span></pre>
+            </div>
+            <div>
+                <pre>|         |                     |</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="' ∖ ' + ${game.getBoard()[0][2][2]} + '  ' + ${game.getBoard()[1][2][2]} + '  ' + ${game.getBoard()[2][2][2]} + '          |'"></span></pre>
+            </div>
+            <div>
+                <pre>   ∖      |                     |</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'     ∖ ' + ${game.getBoard()[0][1][2]} + '  ' + ${game.getBoard[1][1][2]} + '  ' + ${game.getBoard[2][1][2]} + '      |'"></span></pre>
+            </div>
+            <div>
+                <pre>       ∖  |                     |</pre>
+            </div>
+            <div>
+                <pre><span style="white-space: pre" th:text="'         ∖| ' + ${game.getBoard()[0][0][2]} + '  ' + ${game.getBoard()[1][0][2]} + '  ' + ${game.getBoard()[2][0][2]} + ' |'"></span></pre>
+            </div>
+            <div>
+                <pre>           ---------------------+</pre>
+            </div>
+        </h4>
+        <span class="rotate-buttons" th:if="${game.winner} == ''">
+            <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
+            <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
+            <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
+            <button type="button" th:onclick="|window.location.href='/rotate_down'|">DOWN</button>
+        </span>
+        <span class="undo-button" th:if="${game.winner} == ''">
+            <button type="button" th:onclick="|window.location.href='/undo'|">UNDO</button>
+        </span>
+        <span class="home-button">
+            <button type="button" th:onclick="|window.location.href='/'|">HOME</button>
+        </span>
+        <span class="play-again-button" th:if="${game.winner} != ''">
+            <button type="button" th:onclick="|window.location.href='/restart'|">PLAY AGAIN</button>
+        </span>
         <div>
-            <pre>+----------------------</pre>
+            <span style="white-space: pre" th:text="${game.displayMessage}"></span>
         </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'| ∖' + ${game.getBoard()[0][2][0]} + '  ' + ${game.getBoard()[1][2][0]} + '  ' + ${game.getBoard()[2][2][0]} + ' ∖'"></span></pre>
+        <div th:if="${game.winner} != ''">
+            <span style="white-space: pre" th:text="${game.winner} + ' WINS!'"></span>
         </div>
-        <div>
-            <pre>|   ∖                     ∖</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'|     ∖ ' + ${game.getBoard()[0][1][0]} + '  ' + ${game.getBoard()[1][1][0]} + '  ' + ${game.getBoard()[2][1][0]} + ' ∖'"></span></pre>
-        </div>
-        <div>
-            <pre>|       ∖                     ∖</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'|         ∖ ' + ${game.getBoard()[0][0][0]} + '  ' + ${game.getBoard()[1][0][0]} + '  ' + ${game.getBoard()[2][0][0]} + ' ∖'"></span></pre>
-        </div>
-        <div>
-            <pre>|          ---------------------|</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'|   ' + ${game.getBoard()[0][2][1]} + ' |' + ${game.getBoard()[1][2][1]} + '  ' + ${game.getBoard()[2][2][1]} + '         |'"></span></pre>
-        </div>
-        <div>
-            <pre>|         |                     |</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'|       ' + ${game.getBoard()[0][1][1]} + '  ' + ${game.getBoard()[1][1][1]} + '  ' + ${game.getBoard()[2][1][1]} + '     |'"></span></pre>
-        </div>
-        <div>
-            <pre>|         |                     |</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'|         | ' + ${game.getBoard()[0][0][1]} + '  ' + ${game.getBoard()[1][0][1]} + '  ' + ${game.getBoard()[2][0][1]} + ' |'"></span></pre>
-        </div>
-        <div>
-            <pre>|         |                     |</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="' ∖ ' + ${game.getBoard()[0][2][2]} + '  ' + ${game.getBoard()[1][2][2]} + '  ' + ${game.getBoard()[2][2][2]} + '          |'"></span></pre>
-        </div>
-        <div>
-            <pre>   ∖      |                     |</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'     ∖ ' + ${game.getBoard()[0][1][2]} + '  ' + ${game.getBoard[1][1][2]} + '  ' + ${game.getBoard[2][1][2]} + '      |'"></span></pre>
-        </div>
-        <div>
-            <pre>       ∖  |                     |</pre>
-        </div>
-        <div>
-            <pre><span style="white-space: pre" th:text="'         ∖| ' + ${game.getBoard()[0][0][2]} + '  ' + ${game.getBoard()[1][0][2]} + '  ' + ${game.getBoard()[2][0][2]} + ' |'"></span></pre>
-        </div>
-        <div>
-            <pre>           ---------------------+</pre>
-        </div>
-    </h4>
-    <span class="game-buttons" th:if="${game.winner} == ''">
-        <button type="button" th:onclick="|window.location.href='/rotate_left'|">LEFT</button>
-        <button type="button" th:onclick="|window.location.href='/rotate_right'|">RIGHT</button>
-        <button type="button" th:onclick="|window.location.href='/rotate_up'|">UP</button>
-        <button type="button" th:onclick="|window.location.href='/rotate_down'|">DOWN</button>
-        <button type="button" th:onclick="|window.location.href='/top_left'|">TOP LEFT</button>
-        <button type="button" th:onclick="|window.location.href='/top_middle'|">TOP MIDDLE</button>
-        <button type="button" th:onclick="|window.location.href='/top_right'|">TOP RIGHT</button>
-        <button type="button" th:onclick="|window.location.href='/middle_left'|">MIDDLE LEFT</button>
-        <button type="button" th:onclick="|window.location.href='/middle_middle'|">MIDDLE MIDDLE</button>
-        <button type="button" th:onclick="|window.location.href='/middle_right'|">MIDDLE RIGHT</button>
-        <button type="button" th:onclick="|window.location.href='/bottom_left'|">BOTTOM LEFT</button>
-        <button type="button" th:onclick="|window.location.href='/bottom_middle'|">BOTTOM MIDDLE</button>
-        <button type="button" th:onclick="|window.location.href='/bottom_right'|">BOTTOM RIGHT</button>
-        <button type="button" th:onclick="|window.location.href='/undo'|">UNDO</button>
-    </span>
-    <div>
-        <span style="white-space: pre" th:text="${game.displayMessage}"></span>
     </div>
-    <div th:if="${game.winner} != ''">
-        <span style="white-space: pre" th:text="${game.winner} + ' WINS!'"></span>
-        <button type="button" th:onclick="|window.location.href='/restart'|">PLAY AGAIN</button>
-    </div>
-    <button type="button" th:onclick="|window.location.href='/'|">HOME</button>
 </body>
 </html>
 
