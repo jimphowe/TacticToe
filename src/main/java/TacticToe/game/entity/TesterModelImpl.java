@@ -1,17 +1,17 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 public class TesterModelImpl extends TacticToeModelImpl {
-    private Random random = new Random();
+    private final Random random = new Random();
     private final LocationState computerColor = LocationState.GREEN;
 
     public TesterModelImpl(LocationState[][][] pieces) {
-        super();
         this.pieces = copyBoard(pieces);
         this.previousBoards = new ArrayList<>();
+        this.previousBoards.add(copyBoard(this.pieces));
     }
 
     private ArrayList<Move> getPossibleMoves() {
@@ -55,9 +55,17 @@ public class TesterModelImpl extends TacticToeModelImpl {
 
     @Override
     public void undo() {
-        if(previousBoards.size() > 0) {
-            this.pieces = previousBoards.get(previousBoards.size()-1);
+        //System.out.println("BEFORE UNDO:");
+        //for (LocationState[][][] board : this.previousBoards) {
+        //    System.out.println(getBoardString(board));
+        //}
+        if(previousBoards.size() > 1) {
+            this.pieces = previousBoards.get(previousBoards.size()-2);
             previousBoards.remove(previousBoards.size()-1);
         }
+        //System.out.println("AFTER UNDO:");
+        //for (LocationState[][][] board : this.previousBoards) {
+        //    System.out.println(getBoardString(board));
+        //}
     }
 }

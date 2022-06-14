@@ -1,4 +1,4 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 public class BoardLocation {
     private int x;

@@ -1,7 +1,7 @@
-package TicTacToe3D;
+package TacticToe;
 
-import TicTacToe3D.game.entity.OnePlayerImpl;
-import TicTacToe3D.game.entity.LocationState;
+import TacticToe.game.entity.OnePlayerImpl;
+import TacticToe.game.entity.LocationState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TacticToeController {
 
     OnePlayerImpl game = new OnePlayerImpl();
+    public Boolean playerFirst;
+
+    @GetMapping("/")
+    public String home(Model model) {
+        setModelGameAttributes(model, this);
+        return "index";
+    }
 
     @RequestMapping(value = "/restart")
     public String reset(Model model) {
         this.game.restart();
-        game.computerMove();
+        if (!this.playerFirst) {
+            game.computerMove();
+        }
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -30,6 +39,8 @@ public class TacticToeController {
     @RequestMapping(value = "/difficulty_selection")
     public String difficultySelection(Model model) {
         setModelGameAttributes(model, this.game);
+        setModelGameAttributes(model, this);
+        this.playerFirst = false;
         return "difficulty_selection";
     }
 
@@ -38,7 +49,9 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 1;
-        game.computerMove();
+        if (!this.playerFirst) {
+            game.computerMove();
+        }
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -48,7 +61,9 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 2;
-        game.computerMove();
+        if (!this.playerFirst) {
+            game.computerMove();
+        }
         setModelGameAttributes(model, this.game);
         return "game";
     }
@@ -58,9 +73,19 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 3;
-        game.computerMove();
+        if (!this.playerFirst) {
+            game.computerMove();
+        }
         setModelGameAttributes(model, this.game);
         return "game";
+    }
+
+    @RequestMapping(value = "/toggle_first_player")
+    public String toggleFirstPlayer(Model model) {
+        this.playerFirst = !this.playerFirst;
+        setModelGameAttributes(model, this.game);
+        setModelGameAttributes(model, this);
+        return "difficulty_selection";
     }
 
     @RequestMapping(value = "/rotate_left")
@@ -97,7 +122,7 @@ public class TacticToeController {
             if (game.isGameOver()) {
                 return;
             }
-            this.game.move(x,y,player);
+            this.game.move(x,y,1,player);
             if (game.isGameOver()) {
                 game.winner = "RED";
                 return;
@@ -177,12 +202,11 @@ public class TacticToeController {
         return "game";
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "index";
-    }
-
     private void setModelGameAttributes(Model model, OnePlayerImpl game) {
         model.addAttribute("game", game);
+    }
+
+    private void setModelGameAttributes(Model model, TacticToeController controller) {
+        model.addAttribute("controller", controller);
     }
 }

@@ -1,4 +1,4 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,35 +135,31 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
     public void move(int x, int y, int face, LocationState player) {
         switch (face) {
             case 1:
-                previousBoards.add(copyBoard(this.pieces));
+                //TODO why is this necessary here?... Idk how java works :((( also took forever to find this bug
+                this.pieces = copyBoard(this.pieces);
                 move(x,y,player);
                 break;
             case 2:
-                previousBoards.add(copyBoard(this.pieces));
                 this.rotateDown();
                 move(x,y,player);
                 this.rotateUp();
                 break;
             case 3:
-                previousBoards.add(copyBoard(this.pieces));
                 this.rotateUp();
                 move(x,y,player);
                 this.rotateDown();
                 break;
             case 4:
-                previousBoards.add(copyBoard(this.pieces));
                 this.rotateRight();
                 move(x,y,player);
                 this.rotateLeft();
                 break;
             case 5:
-                previousBoards.add(copyBoard(this.pieces));
                 this.rotateLeft();
                 move(x,y,player);
                 this.rotateRight();
                 break;
             case 6:
-                previousBoards.add(copyBoard(this.pieces));
                 this.rotateUp();
                 this.rotateUp();
                 move(x,y,player);
@@ -171,6 +167,7 @@ public abstract class TacticToeModelImpl implements TacticToeModel {
                 this.rotateDown();
                 break;
         }
+        previousBoards.add(copyBoard(this.pieces));
     }
 
     // Used in game view template

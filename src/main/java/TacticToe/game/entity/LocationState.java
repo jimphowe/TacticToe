@@ -1,4 +1,4 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 import java.util.List;
 import java.util.Random;

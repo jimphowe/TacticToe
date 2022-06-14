@@ -1,4 +1,4 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 public interface TacticToeModel {
     void move(int x, int y, int face, LocationState player) throws

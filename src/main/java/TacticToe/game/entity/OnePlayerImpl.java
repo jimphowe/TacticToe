@@ -1,4 +1,4 @@
-package TicTacToe3D.game.entity;
+package TacticToe.game.entity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -6,7 +6,6 @@ import java.util.Random;
 public class OnePlayerImpl extends TacticToeModelImpl {
     public Integer difficulty = null;
     private final LocationState computerColor = LocationState.GREEN;
-    private final LocationState playerColor = LocationState.RED;
     private static final Random random = new Random();
 
     private Move lvl1Move() {
@@ -51,8 +50,7 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             default:
         }
         assert move != null;
-        move(move.x,move.y,move.face,this.computerColor);
-        this.previousBoards.add(copyBoard(this.pieces));
+        this.move(move.x,move.y,move.face,this.computerColor);
     }
 
     // Sets the board to start a game (9 Neutral Black pieces in random locations)
@@ -79,6 +77,7 @@ public class OnePlayerImpl extends TacticToeModelImpl {
         }
         // Set previous boards
         this.previousBoards = new ArrayList<>();
+        previousBoards.add(copyBoard(this.pieces));
     }
 
     @Override
