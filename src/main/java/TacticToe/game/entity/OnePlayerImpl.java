@@ -6,31 +6,59 @@ import java.util.Random;
 public class OnePlayerImpl extends TacticToeModelImpl {
     public Integer difficulty = null;
     private final LocationState computerColor = LocationState.GREEN;
+    private final LocationState playerColor = LocationState.RED;
     private static final Random random = new Random();
 
+    // Wins the game if possible, otherwise plays a random move
     private Move lvl1Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove();
+        Move move = tester.getWinningMove(this.computerColor);
         if (move == null) {
             move = tester.getRandomMove();
         }
         return move;
     }
 
+    // Wins the game if possible, otherwise blocks the player from winning next turn if possible,
+    // otherwise plays a random move
     private Move lvl2Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove();
-        if (move == null) {
-            move = tester.getRandomMove();
+        Move move = tester.getWinningMove(this.computerColor);
+        if(move == null) {
+            move = tester.getDefendingMove(this.computerColor,this.playerColor);
+            if(move == null) {
+                move = tester.getRandomMove();
+            }
         }
         return move;
     }
 
     private Move lvl3Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
-        Move move = tester.getWinningMove();
+        Move move = tester.getWinningMove(this.computerColor);
         if (move == null) {
-            move = tester.getRandomMove();
+            move = tester.getDefendingMove(this.computerColor,this.playerColor);
+            if (move == null) {
+                move = tester.getRandomMove();
+            }
+        }
+        return move;
+    }
+
+    private Move lvl4Move() {
+        TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        Move move = tester.getWinningMove(this.computerColor);
+        if (move == null) {
+            move = tester.getWinInTwo(this.computerColor,this.playerColor);
+            if (move == null) {
+                move = tester.getBestDefendingMove(this.computerColor,this.playerColor);
+                if (move == null) {
+                    move = tester.getBetterDefendingMove(this.computerColor,this.playerColor);
+                    if (move == null) {
+                        move = tester.getRandomMove();
+                    }
+                }
+            }
         }
         return move;
     }
@@ -46,6 +74,9 @@ public class OnePlayerImpl extends TacticToeModelImpl {
                 break;
             case 3:
                 move = lvl3Move();
+                break;
+            case 4:
+                move = lvl4Move();
                 break;
             default:
         }
@@ -63,8 +94,8 @@ public class OnePlayerImpl extends TacticToeModelImpl {
                 }
             }
         }
-        // Pick 9 to make Black
-        for (int i = 0; i < 9; i++) {
+        // Pick 11 to make Black (this was found to be the most competitive number)
+        for (int i = 0; i < 11; i++) {
             int x = random.nextInt(3);
             int y = random.nextInt(3);
             int z = random.nextInt(3);

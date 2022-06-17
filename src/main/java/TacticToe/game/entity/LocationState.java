@@ -17,9 +17,20 @@ public enum LocationState {
         return values.get(random.nextInt(values.size()));
     }
 
-    @Override
     // Makes all states 5 characters, which makes formatting easy
+    @Override
     public String toString() {
-        return (this.name() == "RED" ? " RED " : this.name());
+        switch (this.name()) {
+            case "RED":
+                return " RED ";
+            case "BLACK":
+                return "BLACK";
+            case "GREEN":
+                return "GREEN";
+            case "EMPTY":
+                return "  *  ";
+            default:
+                return " XXX ";
+        }
     }
 }

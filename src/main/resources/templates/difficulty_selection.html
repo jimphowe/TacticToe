@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="css/difficulty_selection.css"/>
 </head>
 <body>
-    <button type="button" th:onclick="|window.location.href='/level1'|">LEVEL 1</button>
-    <button type="button" th:onclick="|window.location.href='/level2'|">LEVEL 2</button>
-    <button type="button" th:onclick="|window.location.href='/level3'|">LEVEL 3</button>
+    <button type="button" th:onclick="|window.location.href='/level1'|">BEGINNER</button>
+    <button type="button" th:onclick="|window.location.href='/level2'|">INTERMEDIATE</button>
+    <button type="button" th:onclick="|window.location.href='/level3'|">ADVANCED</button>
+    <button type="button" th:onclick="|window.location.href='/level4'|">EXPERT</button>
     <h4>Go First?</h4>
     <button th:onclick="|window.location.href='/toggle_first_player'|" th:style="${controller.playerFirst} == true ? 'background: grey' : 'background: white'"></button>
 </body>

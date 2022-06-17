@@ -80,6 +80,18 @@ public class TacticToeController {
         return "game";
     }
 
+    @RequestMapping(value = "/level4")
+    public String level4(Model model) {
+        game = new OnePlayerImpl();
+        this.game.setStartingBoard();
+        this.game.difficulty = 4;
+        if (!this.playerFirst) {
+            game.computerMove();
+        }
+        setModelGameAttributes(model, this.game);
+        return "game";
+    }
+
     @RequestMapping(value = "/toggle_first_player")
     public String toggleFirstPlayer(Model model) {
         this.playerFirst = !this.playerFirst;
