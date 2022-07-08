@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class OnePlayerImpl extends TacticToeModelImpl {
-    public Integer difficulty = null;
+    public int difficulty;
     private final LocationState computerColor = LocationState.GREEN;
     private final LocationState playerColor = LocationState.RED;
     private static final Random random = new Random();
@@ -23,6 +23,9 @@ public class OnePlayerImpl extends TacticToeModelImpl {
     // otherwise plays a random move
     private Move lvl2Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        if (this.firstMove()) {
+            return tester.getFirstMove();
+        }
         Move move = tester.getWinningMove(this.computerColor);
         if(move == null) {
             move = tester.getDefendingMove(this.computerColor,this.playerColor);
@@ -37,9 +40,12 @@ public class OnePlayerImpl extends TacticToeModelImpl {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
         Move move = tester.getWinningMove(this.computerColor);
         if (move == null) {
-            move = tester.getDefendingMove(this.computerColor,this.playerColor);
+            move = tester.getWinInTwo(this.computerColor,this.playerColor);
             if (move == null) {
-                move = tester.getRandomMove();
+                move = tester.getDefendingMove(this.computerColor, this.playerColor);
+                if (move == null) {
+                    move = tester.getRandomMove();
+                }
             }
         }
         return move;
@@ -47,6 +53,9 @@ public class OnePlayerImpl extends TacticToeModelImpl {
 
     private Move lvl4Move() {
         TesterModelImpl tester = new TesterModelImpl(this.pieces);
+        if (this.firstMove()) {
+            return tester.getFirstMove();
+        }
         Move move = tester.getWinningMove(this.computerColor);
         if (move == null) {
             move = tester.getWinInTwo(this.computerColor,this.playerColor);
@@ -61,6 +70,19 @@ public class OnePlayerImpl extends TacticToeModelImpl {
             }
         }
         return move;
+    }
+
+    private boolean firstMove() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (pieces[i][j][k] == LocationState.GREEN || pieces[i][j][k] == LocationState.RED) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public void computerMove() {

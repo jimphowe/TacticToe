@@ -1,7 +1,7 @@
 package TacticToe.game.entity;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TesterModelImpl extends TacticToeModelImpl {
@@ -15,6 +15,7 @@ public class TesterModelImpl extends TacticToeModelImpl {
         this.previousBoards.add(copyBoard(this.pieces));
     }
 
+    // Returns a list off valid moves in the position, in a random order
     private ArrayList<Move> getPossibleMoves() {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         for(int i = 0; i < 3; i++) {
@@ -27,12 +28,57 @@ public class TesterModelImpl extends TacticToeModelImpl {
                 }
             }
         }
+        Collections.shuffle(possibleMoves);
         return possibleMoves;
     }
 
+    private LocationState getPiece(int x, int y, int face) {
+        switch (face) {
+            case 1:
+                return pieces[x][0][y];
+            case 2:
+                return pieces[x][y][0];
+            case 3:
+                return pieces[x][y][2];
+            case 4:
+                return pieces[0][x][y];
+            case 5:
+                return pieces[2][x][y];
+            case 6:
+                return pieces[x][2][2-y];
+        }
+        return null;
+    }
+
+    // Returns a list off valid moves in the position, with moves pushing the opponent suggested first
+    private ArrayList<Move> getPossibleMovesPush() {
+        ArrayList<Move> possiblePushMoves = new ArrayList<>();
+        ArrayList<Move> possibleOtherMoves = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                for(Integer face : IntStream.range(1, 7).toArray()) {
+                    if(this.isValidMove(i,j,face)) {
+                        Move toAdd = new Move(i,j,face);
+                        if (getPiece(i,j,face) == LocationState.RED) {
+                            possiblePushMoves.add(toAdd);
+                        }
+                        else {
+                            possibleOtherMoves.add(toAdd);
+                        }
+                    }
+                }
+            }
+        }
+        Collections.shuffle(possiblePushMoves);
+        Collections.shuffle(possibleOtherMoves);
+        possiblePushMoves.addAll(possibleOtherMoves);
+        return possiblePushMoves;
+    }
+
+    // Returns the first possible move from a shuffles list of all possible moves
     public Move getRandomMove() {
         ArrayList<Move> possibleMoves = getPossibleMoves();
-        return possibleMoves.get(random.nextInt(possibleMoves.size()));
+        return possibleMoves.get(0);
     }
 
     public Move getDefendingMove(LocationState player1, LocationState player2) {
@@ -69,9 +115,10 @@ public class TesterModelImpl extends TacticToeModelImpl {
 
     public Move getWinInTwo(LocationState player1, LocationState player2) {
         // loop through all computer moves
+        boolean found;
         for(Move move : getPossibleMoves()) {
             move(move.x,move.y,move.face,player1);
-            boolean found = true;
+            found = true;
             if(getWinningMove(player2) == null) {
                 for (Move inner : getPossibleMoves()) {
                     move(inner.x,inner.y,inner.face,player2);
@@ -91,54 +138,53 @@ public class TesterModelImpl extends TacticToeModelImpl {
     }
 
     // returns a move where player2 can't win in either 1 or two moves, and if not possible to stop
-    // wins in two, minimizes them. Also has a bias towards corner moves
+    // wins in two, minimizes them
     public Move getBestDefendingMove(LocationState player1, LocationState player2) {
-        ArrayList<Move> potentialMoves = new ArrayList<>();
+        Move result = null;
         int minOpponentWins = 100;
-        for(Move move : getPossibleMoves()) {
+        ArrayList<Move> possibleMoves = getPossibleMoves();
+        System.out.println("Num possible moves: " + possibleMoves.size());
+        for (Move move : possibleMoves) {
             move(move.x, move.y, move.face,player1);
-            int numOpponentWins = getNumWinInTwo(player2, player1);
-            if(getWinningMove(player2) == null) {
-                if(numOpponentWins == minOpponentWins) {
-                    potentialMoves.add(move);
+            if (getWinningMove(player2) == null) {
+                int numOpponentWins = getNumWinInTwo(player2, player1);
+                System.out.println(numOpponentWins);
+                if (numOpponentWins == 0) {
+                    System.out.println("Found 0 so returning move");
+                    return move;
                 }
-                else if(numOpponentWins < minOpponentWins) {
-                    potentialMoves.clear();
-                    potentialMoves.add(move);
+                else if (numOpponentWins < minOpponentWins) {
+                    result = move;
                     minOpponentWins = numOpponentWins;
+                }
+                else {
+                    continue;
                 }
             }
             undo();
         }
-        if(potentialMoves.size() != 0) {
-            //Cool fact ->
-            System.out.println("choose from " + potentialMoves.size() + " moves! Opponent ways to win: " + minOpponentWins);
-            ArrayList<Move> betterMoves = new ArrayList<>();
-            for(Move move : potentialMoves) {
-                if(isCornerMove(move)) {
-                    betterMoves.add(move);
-                }
-            }
-            if(betterMoves.size() != 0) {
-                return betterMoves.get(random.nextInt(betterMoves.size()));
-            }
-            return potentialMoves.get(random.nextInt(potentialMoves.size()));
-        }
-        else {
-            return null;
-        }
+        System.out.println("Looped through all and returning move");
+        return result;
     }
 
-    private boolean isCornerMove(Move move) {
-        return move.x % 2 == 0 && move.y % 2 == 0;
+    // Picks a center if one is available, otherwise random
+    public Move getFirstMove() {
+        List<Integer> faces = IntStream.range(1,7).boxed().collect(Collectors.toList());
+        for (Integer face : faces) {
+            if (isValidMove(1,1,face)) {
+                return new Move(1,1,face);
+            }
+        }
+        return getRandomMove();
     }
 
     private int getNumWinInTwo(LocationState player1, LocationState player2) {
         // loop through all computer moves
         int count = 0;
+        boolean found;
         for(Move move : getPossibleMoves()) {
             move(move.x,move.y,move.face,player1);
-            boolean found = true;
+            found = true;
             if(getWinningMove(player2) == null) {
                 for (Move inner : getPossibleMoves()) {
                     move(inner.x,inner.y,inner.face,player2);
