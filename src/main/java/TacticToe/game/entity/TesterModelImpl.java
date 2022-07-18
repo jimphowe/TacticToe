@@ -75,6 +75,31 @@ public class TesterModelImpl extends TacticToeModelImpl {
         return possiblePushMoves;
     }
 
+    // Returns a list off valid moves in the position, with corner moves suggested first
+    private ArrayList<Move> getPossibleMovesCorner() {
+        ArrayList<Move> possibleCornerMoves = new ArrayList<>();
+        ArrayList<Move> possibleOtherMoves = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                for(Integer face : IntStream.range(1, 7).toArray()) {
+                    if(this.isValidMove(i,j,face)) {
+                        Move toAdd = new Move(i,j,face);
+                        if ((i == 0 || i == 2) && (j == 0 || j == 2)) {
+                            possibleCornerMoves.add(toAdd);
+                        }
+                        else {
+                            possibleOtherMoves.add(toAdd);
+                        }
+                    }
+                }
+            }
+        }
+        Collections.shuffle(possibleCornerMoves);
+        Collections.shuffle(possibleOtherMoves);
+        possibleCornerMoves.addAll(possibleOtherMoves);
+        return possibleCornerMoves;
+    }
+
     // Returns the first possible move from a shuffles list of all possible moves
     public Move getRandomMove() {
         ArrayList<Move> possibleMoves = getPossibleMoves();
@@ -141,29 +166,35 @@ public class TesterModelImpl extends TacticToeModelImpl {
     // wins in two, minimizes them
     public Move getBestDefendingMove(LocationState player1, LocationState player2) {
         Move result = null;
+        int checked = 0;
         int minOpponentWins = 100;
-        ArrayList<Move> possibleMoves = getPossibleMoves();
+        ArrayList<Move> possibleMoves = getPossibleMovesCorner();
         System.out.println("Num possible moves: " + possibleMoves.size());
         for (Move move : possibleMoves) {
+            // Caps number of moves to look at, for speed's sake
+            if (checked >= 8) {
+                return move;
+            }
             move(move.x, move.y, move.face,player1);
             if (getWinningMove(player2) == null) {
+                checked += 1;
                 int numOpponentWins = getNumWinInTwo(player2, player1);
                 System.out.println(numOpponentWins);
                 if (numOpponentWins == 0) {
-                    System.out.println("Found 0 so returning move");
+                    undo();
                     return move;
                 }
                 else if (numOpponentWins < minOpponentWins) {
                     result = move;
                     minOpponentWins = numOpponentWins;
                 }
-                else {
-                    continue;
-                }
             }
             undo();
         }
         System.out.println("Looped through all and returning move");
+        if (result != null) {
+            undo();
+        }
         return result;
     }
 

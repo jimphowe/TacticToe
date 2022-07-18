@@ -49,6 +49,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 1;
+        this.game.firstPlayer = (playerFirst ? LocationState.RED : LocationState.GREEN);
         if (!this.playerFirst) {
             game.computerMove();
         }
@@ -61,6 +62,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 2;
+        this.game.firstPlayer = (playerFirst ? LocationState.RED : LocationState.GREEN);
         if (!this.playerFirst) {
             game.computerMove();
         }
@@ -73,6 +75,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 3;
+        this.game.firstPlayer = (playerFirst ? LocationState.RED : LocationState.GREEN);
         if (!this.playerFirst) {
             game.computerMove();
         }
@@ -85,6 +88,7 @@ public class TacticToeController {
         game = new OnePlayerImpl();
         this.game.setStartingBoard();
         this.game.difficulty = 4;
+        this.game.firstPlayer = (playerFirst ? LocationState.RED : LocationState.GREEN);
         if (!this.playerFirst) {
             game.computerMove();
         }
@@ -128,10 +132,31 @@ public class TacticToeController {
         return "game";
     }
 
+    private int numPieces(LocationState player) {
+        int counter = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    if (this.game.pieces[i][j][k] == player) {
+                        counter += 1;
+                    }
+                }
+            }
+        }
+        return counter;
+    }
+
     // TODO this seems messy with all the gameOver checks
+    // TODO BUG where strange behavior if click again before computer makes move
     public void makeMove(int x, int y, LocationState player) {
         try {
             if (game.isGameOver()) {
+                return;
+            }
+            if (playerFirst && numPieces(LocationState.RED) > numPieces(LocationState.GREEN)) {
+                return;
+            }
+            if (!playerFirst && numPieces(LocationState.RED) >= numPieces(LocationState.GREEN)) {
                 return;
             }
             this.game.move(x,y,1,player);
